@@ -17,12 +17,12 @@ class DataConfig:
 class BetoConfig:
     base_model: str = "dccuchile/bert-base-spanish-wwm-cased"
     num_labels: int = 2
-    num_epochs: int = 10
+    num_epochs: int = 100
     batch_size: int = 32
     learning_rate: float = 1e-4
     warmup_ratio: float = 0.1
     weight_decay: float = 0.01
-    early_stopping_patience: int = 3
+    early_stopping_patience: int = 5
     output_dir: str = "results/checkpoints"
 
 

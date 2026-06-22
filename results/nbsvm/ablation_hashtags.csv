@@ -1,0 +1,2 @@
+modelo,macro_f1_con_hashtags,macro_f1_sin_hashtags,diferencia,diferencia_pct
+NBSVM,0.763304840480693,0.7500578867872449,0.013246953693448082,1.74

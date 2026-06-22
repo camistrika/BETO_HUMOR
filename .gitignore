@@ -1,0 +1,16 @@
+# Datos 
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+#resultados
+results/*
+
+# Python
+__pycache__/
+
+
+# Entornos virtuales
+AP_FINAL/
+

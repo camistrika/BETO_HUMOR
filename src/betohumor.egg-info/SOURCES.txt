@@ -6,6 +6,7 @@ src/betohumor/dataset.py
 src/betohumor/hyperparam_search.py
 src/betohumor/metrics.py
 src/betohumor/plots.py
+src/betohumor/smoke_test_train.py
 src/betohumor/train.py
 src/betohumor/utils.py
 src/betohumor.egg-info/PKG-INFO

@@ -18,3 +18,5 @@ def build_nbsvm_vectorizer(nbsvm_config):
 def build_nbsvm_classifier(nbsvm_config, seed):
     """Construye la Regresión Logística a partir de NbsvmConfig."""
     return LogisticRegression(C=nbsvm_config.C, max_iter=1000, random_state=seed)
+
+

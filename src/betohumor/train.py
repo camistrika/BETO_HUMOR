@@ -10,11 +10,6 @@ from betohumor.metrics import compute_metrics
 
 
 class WeightedTrainer(Trainer):
-    """
-    Trainer con CrossEntropyLoss ponderada por clase, para compensar
-    el desbalance del dataset.
-    """
-
     def __init__(self, *args, class_weights=(1.0, 1.58), **kwargs):
         super().__init__(*args, **kwargs)
         self.class_weights = class_weights
@@ -29,7 +24,7 @@ class WeightedTrainer(Trainer):
         return (loss, outputs) if return_outputs else loss
 
 
-class _EpochPrintCallback(TrainerCallback):
+class EpochPrintCallback(TrainerCallback):
     def on_evaluate(self, args, state, control, metrics=None, **kwargs):
         if metrics is None:
             return
@@ -42,9 +37,22 @@ class _EpochPrintCallback(TrainerCallback):
         )
 
 
-def _build_training_args(
+def build_training_args(
     beto_config, output_dir, seed, learning_rate=None, weight_decay=None, quiet=True
 ):
+    """
+    Construye TrainingArguments a partir de BetoConfig, permitiendo
+    overridear learning_rate y weight_decay (útil en grid search / CV).
+
+    logging_strategy="epoch" hace que el train_loss se registre exactamente
+    al final de cada época, en el mismo punto que eval_loss (en vez de cada
+    N steps fijos, que puede caer un poco antes/después del límite exacto
+    de la época y desalinear los dos ejes en el gráfico).
+
+    quiet=True (default) desactiva las barras de progreso, para que el
+    output no se vuelva enorme en entrenamientos largos. Pasá quiet=False
+    si querés el output verboso estándar de HuggingFace.
+    """
     return TrainingArguments(
         output_dir=output_dir,
         num_train_epochs=beto_config.num_epochs,
@@ -65,8 +73,7 @@ def _build_training_args(
         seed=seed,
         fp16=True,
         disable_tqdm=quiet,
-        logging_strategy="no" if quiet else "steps",
-        logging_steps=200,
+        logging_strategy="epoch",  # un punto de train_loss por época, alineado con eval
         report_to="none",
     )
 
@@ -83,8 +90,14 @@ def train_model(
     class_weights=(1.0, 1.58),
     quiet=True,
 ):
-    args = _build_training_args(
-        beto_config, output_dir, seed, learning_rate, weight_decay, quiet=quiet
+
+    args = build_training_args(
+        beto_config,
+        output_dir,
+        seed,
+        learning_rate,
+        weight_decay,
+        quiet=quiet,
     )
 
     callbacks = [
@@ -93,7 +106,7 @@ def train_model(
         )
     ]
     if quiet:
-        callbacks.append(_EpochPrintCallback())
+        callbacks.append(EpochPrintCallback())
 
     trainer = WeightedTrainer(
         model=model,
