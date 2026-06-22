@@ -1,0 +1,4 @@
+,precision,recall,f1-score
+No humor,0.783,0.893,0.834
+Humor,0.781,0.605,0.682
+macro avg,0.782,0.749,0.758
