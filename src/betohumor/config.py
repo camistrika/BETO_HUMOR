@@ -10,7 +10,7 @@ class DataConfig:
     text_col: str = "text"
     label_col: str = "is_humor"
     val_size: float = 0.1
-    max_length: int = 128
+    max_length: int = 64
 
 
 @dataclass
