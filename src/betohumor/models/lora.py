@@ -14,7 +14,7 @@ def build_beto_lora(beto_config, lora_config):
         lora_alpha=lora_config.lora_alpha,
         lora_dropout=lora_config.lora_dropout,
         target_modules=lora_config.target_modules,
-        modules_to_save=["classifier"],
+        modules_to_save=["classifier", "pooler.dense"],
         bias="none",
     )
     model = get_peft_model(model, peft_config)
