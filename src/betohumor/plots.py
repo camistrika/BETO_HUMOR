@@ -55,8 +55,13 @@ def plot_training_curves(history):
 def plot_confusion_matrix(
     cm, title="Matriz de confusión", labels=("No humor", "Humor"), is_percentage=True
 ):
-    fmt = ".1f" if is_percentage else "d"
-    cbar_label = "%" if is_percentage else "Cantidad"
+    if is_percentage:
+        fmt = ".1f"
+        cbar_label = "%"
+    else:
+        is_integer_values = (cm == cm.astype(int)).all()
+        fmt = "d" if is_integer_values else ".2f"
+        cbar_label = "Cantidad" if is_integer_values else "Proporción"
 
     fig = plt.figure(figsize=(5, 4))
     sns.heatmap(

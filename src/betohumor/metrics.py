@@ -34,9 +34,9 @@ def get_classification_report_df(y_true, y_pred, target_names=("No humor", "Humo
     ]
 
 
-def get_confusion_matrix(y_true, y_pred, normalize="true"):
+def get_confusion_matrix(y_true, y_pred, normalize="true", as_percentage=True):
     cm = confusion_matrix(y_true, y_pred, normalize=normalize)
-    if normalize is not None:
+    if normalize is not None and as_percentage:
         cm = cm * 100
     return cm
 
